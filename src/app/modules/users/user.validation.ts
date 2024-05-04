@@ -24,10 +24,10 @@ const ZOrderSchema = z.object({
 export const ZUserSchema = z.object({
   userId: z
     .number()
-    .min(2, { message: "User ID must be more than 2 caracters" })
+    .min(1, { message: "User ID must be more than 1 caracters" })
     .max(10, { message: "Username can not be more than 10 caracters" }),
   userName: z
-    .number()
+    .string()
     .max(10, { message: "Username can not be more than 10 caracters" }),
   password: z
     .string()
