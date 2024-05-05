@@ -10,11 +10,19 @@ const createUserIntoDB = async (userData: IUser) => {
 };
 
 const getAllUserFronDB = async () => {
-  const result = await User.find();
+  const result = await User.aggregate([
+    { $project: { userName: 1, fullName: 1, age: 1, email: 1, address: 1 } },
+  ]);
+  return result;
+};
+
+const getSingleUserFronDB = async (userId: string) => {
+  const result = await User.findOne({ userId });
   return result;
 };
 
 export const UserServices = {
   createUserIntoDB,
   getAllUserFronDB,
+  getSingleUserFronDB,
 };

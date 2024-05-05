@@ -67,7 +67,7 @@ UserSchema.post("save", function (doc, next) {
   next();
 });
 
-UserSchema.statics.isUserExists = async (userId: number) => {
+UserSchema.statics.isUserExists = async (userId: string) => {
   const existingUser = await User.findOne({ userId });
   return existingUser;
 };
