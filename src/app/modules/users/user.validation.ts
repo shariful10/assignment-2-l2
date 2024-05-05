@@ -36,6 +36,25 @@ export const ZUserSchema = z.object({
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: ZAddressSchema,
-  // orders: z.array(ZOrderSchema).optional(),
+  orders: z.array(ZOrderSchema).optional(),
   isDeleted: z.boolean(),
+});
+
+// a separate validation for update user
+export const ZUserUpdateSchema = z.object({
+  userId: z.number(),
+  userName: z.string(),
+  fullName: z.object({
+    firstName: z.string(),
+    lastName: z.string(),
+  }),
+  age: z.number(),
+  email: z.string(),
+  isActive: z.boolean(),
+  hobbies: z.array(z.string()),
+  address: z.object({
+    street: z.string(),
+    city: z.string(),
+    country: z.string(),
+  }),
 });

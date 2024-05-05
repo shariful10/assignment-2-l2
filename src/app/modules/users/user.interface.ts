@@ -17,6 +17,7 @@ export interface IOrder {
   quantity: number;
 }
 
+// User interface
 export type IUser = {
   userId: number;
   userName: string;
@@ -27,9 +28,28 @@ export type IUser = {
   isActive: boolean;
   hobbies: string[];
   address: IAddress;
-  // orders?: IOrder[];
+  orders?: IOrder[];
   isDeleted: boolean;
 };
+
+// For update user
+export interface IUserUpdate {
+  userId: number;
+  username?: string;
+  fullName?: {
+    firstName?: string;
+    lastName?: string;
+  };
+  age?: number;
+  email?: string;
+  isActive?: boolean;
+  hobbies?: string[];
+  address?: {
+    street?: string;
+    city?: string;
+    country?: string;
+  };
+}
 
 export interface UserModel extends Model<IUser> {
   // eslint-disable-next-line no-unused-vars

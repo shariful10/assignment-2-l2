@@ -1,5 +1,5 @@
 import { User } from "../user.model";
-import { IUser } from "./user.interface";
+import { IUser, IUserUpdate } from "./user.interface";
 
 const createUserIntoDB = async (userData: IUser) => {
   if (await User.isUserExists(userData.userId)) {
@@ -33,8 +33,19 @@ const getSingleUserFronDB = async (userId: string) => {
   return result;
 };
 
+const upadateUserFromDB = async (userId: string, updateUser: IUserUpdate) => {
+  const existingUser = await User.isUserExists(parseInt(userId));
+  if (!existingUser) {
+    throw new Error();
+  }
+
+  const result = await User.updateOne({ userId }, { $set: updateUser });
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFronDB,
   getSingleUserFronDB,
+  upadateUserFromDB,
 };

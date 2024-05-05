@@ -47,7 +47,7 @@ const UserSchema = new Schema<IUser, UserModel>({
   isActive: { type: Boolean, required: true },
   hobbies: [{ type: String, required: true }],
   address: { type: IAddressSchema, required: true },
-  // orders: [{ type: IOrderSchema }],
+  orders: [{ type: IOrderSchema }],
   isDeleted: { type: Boolean, required: true },
 });
 
