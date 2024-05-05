@@ -20,7 +20,7 @@ const IAddressSchema = new Schema<IAddress>({
   country: { type: String, required: true },
 });
 
-const IOrderSchema = new Schema<IOrder>({
+export const IOrderSchema = new Schema<IOrder>({
   productName: { type: String, required: true },
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
@@ -32,15 +32,22 @@ const UserSchema = new Schema<IUser, UserModel>({
     required: [true, "User ID is required"],
     unique: true,
   },
-  userName: { type: String, required: true },
-  password: { type: String, required: true },
-  fullName: { type: IFullNameSchema, required: true },
+  userName: {
+    type: String,
+    required: [true, "User name is required"],
+    unique: true,
+  },
+  password: { type: String, required: [true, "Password is required"] },
+  fullName: {
+    type: IFullNameSchema,
+    required: [true, "Full Name is required"],
+  },
   age: { type: Number, required: true },
   email: { type: String, required: true },
   isActive: { type: Boolean, required: true },
+  hobbies: [{ type: String, required: true }],
   address: { type: IAddressSchema, required: true },
-  hobbies: [{ type: String }],
-  orders: [{ type: IOrderSchema }],
+  // orders: [{ type: IOrderSchema }],
   isDeleted: { type: Boolean, required: true },
 });
 

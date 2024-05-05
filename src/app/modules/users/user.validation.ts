@@ -15,17 +15,14 @@ const ZAddressSchema = z.object({
   country: z.string(),
 });
 
-const ZOrderSchema = z.object({
+export const ZOrderSchema = z.object({
   productName: z.string(),
   price: z.number(),
   quantity: z.number(),
 });
 
 export const ZUserSchema = z.object({
-  userId: z
-    .number()
-    .min(1, { message: "User ID must be more than 1 caracters" })
-    .max(10, { message: "Username can not be more than 10 caracters" }),
+  userId: z.number(),
   userName: z
     .string()
     .max(10, { message: "Username can not be more than 10 caracters" }),
@@ -37,8 +34,8 @@ export const ZUserSchema = z.object({
   age: z.number(),
   email: z.string().email(),
   isActive: z.boolean(),
+  hobbies: z.array(z.string()),
   address: ZAddressSchema,
-  hobbies: z.array(z.string()).optional(),
-  orders: z.array(ZOrderSchema).optional(),
+  // orders: z.array(ZOrderSchema).optional(),
   isDeleted: z.boolean(),
 });
