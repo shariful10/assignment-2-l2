@@ -89,7 +89,7 @@ const updateUser = async (req: Request, res: Response) => {
 
     // Password field is not allowed
     if ("password" in updateUser) {
-      throw new Error("Password field is not updatable");
+      throw new Error("Password field upadate is not allowed");
     }
 
     const result = await UserServices.upadateUserFromDB(userId, ZParsedData);
