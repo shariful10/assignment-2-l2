@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
-import { ZUserSchema } from "./user.validation";
 import { UserServices } from "./user.service";
+import { ZUserSchema } from "./user.validation";
 
 // Creayte all users
 const createUser = async (req: Request, res: Response) => {

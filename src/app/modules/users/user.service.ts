@@ -11,13 +11,25 @@ const createUserIntoDB = async (userData: IUser) => {
 
 const getAllUserFronDB = async () => {
   const result = await User.aggregate([
-    { $project: { userName: 1, fullName: 1, age: 1, email: 1, address: 1 } },
+    {
+      $project: {
+        _id: 0,
+        userName: 1,
+        fullName: 1,
+        age: 1,
+        email: 1,
+        address: 1,
+      },
+    },
   ]);
   return result;
 };
 
 const getSingleUserFronDB = async (userId: string) => {
-  const result = await User.findOne({ userId });
+  const result = await User.findOne(
+    { userId },
+    { _id: 0, password: 0, isDeleted: 0, __v: 0 },
+  );
   return result;
 };
 
