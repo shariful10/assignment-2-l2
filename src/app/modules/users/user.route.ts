@@ -9,5 +9,6 @@ router.get("/:userId", userController.getSingleUser);
 router.post("/create-user", userController.createUser);
 router.get("/:userId/orders", userController.getOrders);
 router.put("/:userId/orders", userController.addNewOrder);
+router.get("/:userId/orders/total-price", userController.getTotalOrderPrice);
 
 export const UserRoutes = router;

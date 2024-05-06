@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import bcrypt from "bcrypt";
 import config from "../config";
 import { Schema, model } from "mongoose";
@@ -51,8 +52,8 @@ const UserSchema = new Schema<IUser, UserModel>({
   isDeleted: { type: Boolean, required: true },
 });
 
+// Pre save moddleware/hook
 UserSchema.pre("save", async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
   user.password = await bcrypt.hash(
     user.password,
@@ -61,7 +62,7 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-// post save moddleware/hook
+// Post save moddleware/hook
 UserSchema.post("save", function (doc, next) {
   doc.password = "";
   next();

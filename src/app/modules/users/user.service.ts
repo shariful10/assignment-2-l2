@@ -14,6 +14,13 @@ const getAllUserFronDB = async () => {
     {
       $project: {
         _id: 0,
+        __v: 0,
+        userId: 0,
+        orders: 0,
+        hobbies: 0,
+        password: 0,
+        isActive: 0,
+        isDeleted: 0,
       },
     },
   ]);
@@ -59,6 +66,27 @@ const addNewOrderToDB = async (userId: number, orders: IOrder) => {
   return orders;
 };
 
+const getUserOrdersTotalPrice = async (userId: number) => {
+  const user = await User.findOne({ userId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (!user.orders || user.orders.length === 0) {
+    return 0;
+  }
+
+  // Calculate total price
+  const totalPrice =
+    user.orders?.reduce(
+      (sum, order) => sum + order.price * order.quantity,
+      0,
+    ) || 0;
+
+  return totalPrice;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFronDB,
@@ -66,4 +94,5 @@ export const UserServices = {
   upadateUserFromDB,
   getOrdersFromDB,
   addNewOrderToDB,
+  getUserOrdersTotalPrice,
 };

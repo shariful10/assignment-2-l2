@@ -35,7 +35,7 @@ export type IUser = {
 
 // For update user
 export interface IUserUpdate {
-  userId: number;
+  userId?: number;
   username?: string;
   fullName?: {
     firstName?: string;
@@ -54,5 +54,4 @@ export interface IUserUpdate {
 
 export interface UserModel extends Model<IUser> {
   isUserExists(id: number): Promise<IUser | null>;
-  // addOrder(userId: number, order: IOrder): Promise<IUser | null>;
 }
