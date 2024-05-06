@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { UserServices } from "./user.service";
-import { ZUserSchema, ZUserUpdateSchema } from "./user.validation";
+import {
+  ZOrderSchema,
+  ZUserSchema,
+  ZUserUpdateSchema,
+} from "./user.validation";
 
 // Create user
 const createUser = async (req: Request, res: Response) => {
@@ -117,31 +121,52 @@ const getOrders = async (req: Request, res: Response) => {
 
 // Update user data
 const updateUser = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const updateUser = req.body;
+
+  const ZParsedData = ZUserUpdateSchema.parse(updateUser);
+
+  // Password field is not allowed
+  if ("password" in updateUser) {
+    throw new Error("Updating the password field is not allowed");
+  }
+
+  const result = await UserServices.upadateUserFromDB(userId, ZParsedData);
+
+  res.status(200).json({
+    success: true,
+    message: "User updated successfully!",
+    data: result,
+  });
+};
+
+// Add new order
+const addNewOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const updateUser = req.body;
+    const order = req.body;
 
-    const ZParsedData = ZUserUpdateSchema.parse(updateUser);
+    const ZParsedData = ZOrderSchema.parse(order);
 
-    // Password field is not allowed
-    if ("password" in updateUser) {
-      throw new Error("Password field upadate is not allowed");
+    // Check if order field is present and it's an object
+    if (!order || typeof order !== "object") {
+      throw new Error("Invalid or missing order data");
     }
 
-    const result = await UserServices.upadateUserFromDB(userId, ZParsedData);
+    await UserServices.addNewOrderToDB(parseInt(userId), ZParsedData);
 
     res.status(200).json({
       success: true,
-      message: "User updated successfully!",
-      data: result,
+      message: "Order created successfully!",
+      data: null,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "Failed to update user data",
+      message: err.message || "Failed to add new order",
       error: {
         code: 404,
-        description: "User not found!",
+        description: "User not found or invalid request data",
       },
     });
   }
@@ -153,4 +178,5 @@ export const userController = {
   getSingleUser,
   updateUser,
   getOrders,
+  addNewOrder,
 };

@@ -36,7 +36,6 @@ export const ZUserSchema = z.object({
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: ZAddressSchema,
-  orders: z.array(ZOrderSchema).optional(),
   isDeleted: z.boolean(),
 });
 
@@ -57,4 +56,5 @@ export const ZUserUpdateSchema = z.object({
     city: z.string(),
     country: z.string(),
   }),
+  orders: z.array(ZOrderSchema).optional(),
 });
