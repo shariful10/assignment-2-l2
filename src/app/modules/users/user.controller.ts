@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { UserServices } from "./user.service";
 import { ZUserSchema, ZUserUpdateSchema } from "./user.validation";
 
-// Creayte all users
+// Create user
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
@@ -45,10 +45,11 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// Get single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await UserServices.getSingleUserFronDB(userId);
+    const result = await UserServices.getSingleUserFromDB(userId);
 
     if (!result) {
       res.status(404).json({
@@ -66,6 +67,41 @@ const getSingleUser = async (req: Request, res: Response) => {
       success: true,
       message: "User fetched successfully!",
       data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: "User not found",
+      error: {
+        code: 404,
+        description: "User not found!",
+      },
+    });
+  }
+};
+
+// Get orders
+const getOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserServices.getOrdersFromDB(userId);
+
+    if (result?.orders?.length === 0) {
+      res.status(404).json({
+        success: false,
+        message: "Orders not found",
+        error: {
+          code: 404,
+          description: "Orders not found!",
+        },
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order fetched successfully!",
+      data: result?.orders,
     });
   } catch (err: any) {
     res.status(500).json({
@@ -116,4 +152,5 @@ export const userController = {
   getAllUsers,
   getSingleUser,
   updateUser,
+  getOrders,
 };
