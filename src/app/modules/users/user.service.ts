@@ -34,16 +34,6 @@ const getOrdersFromDB = async (userId: string) => {
     {
       _id: 0,
       __v: 0,
-      age: 0,
-      email: 0,
-      userId: 0,
-      address: 0,
-      hobbies: 0,
-      isActive: 0,
-      userName: 0,
-      password: 0,
-      fullName: 0,
-      isDeleted: 0,
     },
   );
   return result;
