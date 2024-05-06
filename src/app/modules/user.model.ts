@@ -49,7 +49,6 @@ const UserSchema = new Schema<IUser, UserModel>({
   hobbies: [{ type: String, required: true }],
   address: { type: IAddressSchema, required: true },
   orders: [{ type: IOrderSchema }],
-  isDeleted: { type: Boolean, required: true },
 });
 
 // Pre save moddleware/hook

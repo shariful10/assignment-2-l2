@@ -87,12 +87,18 @@ const getUserOrdersTotalPrice = async (userId: number) => {
   return totalPrice;
 };
 
+const deleteUserFromDB = async (userId: number) => {
+  const result = await User.deleteOne({ userId });
+  return result;
+};
+
 export const UserServices = {
-  createUserIntoDB,
-  getAllUserFronDB,
-  getSingleUserFromDB,
-  upadateUserFromDB,
   getOrdersFromDB,
   addNewOrderToDB,
+  createUserIntoDB,
+  deleteUserFromDB,
+  getAllUserFronDB,
+  upadateUserFromDB,
+  getSingleUserFromDB,
   getUserOrdersTotalPrice,
 };

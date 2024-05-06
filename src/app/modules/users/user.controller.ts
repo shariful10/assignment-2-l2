@@ -11,7 +11,7 @@ import {
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
-    // data validation using zod
+    // Data validation using zod
     const ZParsedData = ZUserSchema.parse(user);
     const result = await UserServices.createUserIntoDB(ZParsedData);
 
@@ -23,7 +23,11 @@ const createUser = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err || "Something went wrong",
+      message: err.length > 0 ? err : "Failed to create user",
+      error: {
+        code: 404,
+        description: "Failed to create user",
+      },
     });
   }
 };
@@ -121,23 +125,49 @@ const getOrders = async (req: Request, res: Response) => {
 
 // Update user data
 const updateUser = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const updateUser = req.body;
+  try {
+    const { userId } = req.params;
+    const updateUser = req.body;
 
-  const ZParsedData = ZUserUpdateSchema.parse(updateUser);
+    const ZParsedData = ZUserUpdateSchema.parse(updateUser);
 
-  // Password field is not allowed
-  if ("password" in updateUser) {
-    throw new Error("Updating the password field is not allowed");
+    // Password field is not allowed
+    if ("password" in updateUser) {
+      throw new Error("Updating the password field is not allowed");
+    }
+
+    const result = await UserServices.upadateUserFromDB(userId, ZParsedData);
+
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully!",
+      data: result,
+    });
+  } catch (err: any) {
+    if (err.code === 11000 && err.keyPattern && err.keyValue) {
+      const fieldName = Object.keys(err.keyPattern)[0];
+      const fieldValue = err.keyValue[fieldName];
+      const errMessage = `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} "${fieldValue}" already exists.`;
+
+      res.status(500).json({
+        success: false,
+        message: errMessage,
+        error: {
+          code: 404,
+          description: "Failed to update user",
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: err.message || "User not found!",
+        error: {
+          code: 404,
+          description: "Failed to update user",
+        },
+      });
+    }
   }
-
-  const result = await UserServices.upadateUserFromDB(userId, ZParsedData);
-
-  res.status(200).json({
-    success: true,
-    message: "User updated successfully!",
-    data: result,
-  });
 };
 
 // Add new order
@@ -172,6 +202,28 @@ const addNewOrder = async (req: Request, res: Response) => {
   }
 };
 
+//Delete user
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    await UserServices.deleteUserFromDB(parseInt(userId));
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully!",
+      data: null,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err || "Failed to delete user!",
+      error: {
+        code: 404,
+        description: "User not found!",
+      },
+    });
+  }
+};
+
 // Get total price of orders
 const getTotalOrderPrice = async (req: Request, res: Response) => {
   try {
@@ -201,11 +253,12 @@ const getTotalOrderPrice = async (req: Request, res: Response) => {
 };
 
 export const userController = {
+  getOrders,
+  deleteUser,
   createUser,
+  updateUser,
+  addNewOrder,
   getAllUsers,
   getSingleUser,
-  updateUser,
-  getOrders,
-  addNewOrder,
   getTotalOrderPrice,
 };

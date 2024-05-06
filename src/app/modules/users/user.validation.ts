@@ -36,7 +36,6 @@ export const ZUserSchema = z.object({
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: ZAddressSchema,
-  isDeleted: z.boolean(),
 });
 
 // a separate validation for update user

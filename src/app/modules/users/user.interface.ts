@@ -30,7 +30,6 @@ export type IUser = {
   hobbies: string[];
   address: IAddress;
   orders?: IOrder[];
-  isDeleted: boolean;
 };
 
 // For update user
